@@ -17,8 +17,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Personal Portfolio | Developer & Designer",
-  description: "Personal portfolio website showcasing my work, skills, and projects as a developer and designer.",
+  title: "Lord Binary | Software Developer",
+  description: "Portfolio of Lord Binary — software developer based in Ghana.",
 };
 
 export default function RootLayout({
