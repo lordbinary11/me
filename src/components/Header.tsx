@@ -9,6 +9,7 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('Home');
+  const [logoClicks, setLogoClicks] = useState(0);
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
@@ -20,6 +21,39 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Handle admin access via logo double-click
+  useEffect(() => {
+    if (logoClicks > 0) {
+      const timer = setTimeout(() => {
+        setLogoClicks(0);
+      }, 500); // Reset after 500ms
+
+      if (logoClicks === 2) {
+        // Double click detected - redirect to secret admin route
+        router.push('/admin-21ed04066b135bdddc45a23e2bf2e061');
+      }
+
+      return () => clearTimeout(timer);
+    }
+  }, [logoClicks, router]);
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const newClickCount = logoClicks + 1;
+    setLogoClicks(newClickCount);
+    
+    // Add visual feedback
+    if (newClickCount === 1) {
+      // First click - subtle glow
+      const logo = e.currentTarget;
+      logo.classList.add('animate-pulse');
+      setTimeout(() => logo.classList.remove('animate-pulse'), 500);
+    } else if (newClickCount === 2) {
+      // Second click - redirect to admin
+      console.log('Admin access activated!');
+    }
+  };
 
   useEffect(() => {
     if (pathname === '/') {
@@ -91,10 +125,12 @@ export default function Header() {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo + Wordmark */}
-          <Link
-            href="/"
-            className="flex items-center gap-0 group logo-link"
-          >
+          <div onClick={handleLogoClick} className="cursor-pointer">
+            <Link
+              href="/"
+              className="flex items-center gap-0 group logo-link"
+              onClick={(e) => e.preventDefault()}
+            >
             {/* Inline SVG Logo with animated eyes */}
             <svg
               className="block w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24"
@@ -119,6 +155,7 @@ export default function Header() {
               <span className=" font-bold font-qurova text-[#ff6b6b]">RY</span>
             </div>
           </Link>
+          </div>
 
           {/* Desktop Navigation - Centered */}
           <ul className="hidden lg:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">

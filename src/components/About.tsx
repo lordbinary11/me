@@ -65,13 +65,24 @@ export default function About() {
   const experience = [
     {
       year: '2025 - Present',
-      role: 'Software Developer Intern',
+      role: 'National Service Personnel-(Systems Admin)',
       company: 'Finance Office, KNUST',
       description: 'Finding solutions to problems and improving the efficiency of the office.',
     },
+    {
+      year: '2025',
+      role: 'Software Developer Intern',
+      company: 'Finance Office, KNUST',
+      description: 'Finding solutions to problems and improving the efficiency of the office.',
+    }
   ];
 
   const education = [
+    {
+      degree: 'Master of Philosophy in Computer Science',
+      institution: 'Kwame Nkrumah University of Science and Technology',
+      year: '2026 - Present',
+    },
     {
       degree: 'Bachelor of Science in Computer Science',
       institution: 'Kwame Nkrumah University of Science and Technology',

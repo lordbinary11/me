@@ -3,14 +3,45 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { portfolioProjects } from '@/data/portfolioProjects';
+
+interface Project {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  description: string;
+  date: string;
+  category: string;
+  image?: string;
+  projectUrl?: string;
+  githubUrl?: string;
+  technologies: string[];
+  featured?: boolean;
+}
 
 export default function Portfolio() {
   const [isVisible, setIsVisible] = useState(false);
-  // Show first 6 projects (featured first, then others)
-  const featuredProjects = portfolioProjects.filter(p => p.featured);
-  const otherProjects = portfolioProjects.filter(p => !p.featured);
-  const projects = [...featuredProjects, ...otherProjects].slice(0, 6);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('/api/projects');
+        if (response.ok) {
+          const projectsData = await response.json();
+          // Show first 6 projects (featured first, then others)
+          const featuredProjects = projectsData.filter((p: Project) => p.featured);
+          const otherProjects = projectsData.filter((p: Project) => !p.featured);
+          const sortedProjects = [...featuredProjects, ...otherProjects].slice(0, 6);
+          setProjects(sortedProjects);
+        }
+      } catch (error) {
+        console.error('Failed to fetch projects:', error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
